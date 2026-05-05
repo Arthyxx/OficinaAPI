@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: OficinaAPI
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/oficina?useTimeZone=true&serverTimezone=UTC
+    username: root
+    password: "@Arthur842"
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+    show-sql: false
+    open-in-view: false
+logging:
+  level:
+    OficinaAPI: DEBUG
+spring-doc:
+  paths-to-match: /api/**/v1/**
+  swagger-ui:
+    use-root-path: true
