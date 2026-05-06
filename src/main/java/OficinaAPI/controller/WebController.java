@@ -6,11 +6,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class WebController {
+    @GetMapping
+    public String home(Model model){
+        model.addAttribute("message", "Bem-vindo a nossa oficina!");
+        return "dashboard";
+    }
+
     @GetMapping("/dashboard")
-        public String home(Model model){
-            model.addAttribute("message", "Bem-vindo a nossa oficina!");
-            return "dashboard";
-        }
+    public String dashboard(Model model){
+        model.addAttribute("message", "Bem-vindo a nossa oficina!");
+        return "dashboard";
+    }
 
         @GetMapping("/login")
         public String login(Model model){
