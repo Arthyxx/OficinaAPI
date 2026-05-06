@@ -29,7 +29,19 @@ public class Carro implements Serializable {
     @Column(nullable = false)
     private String problem;
 
+    @Enumerated(EnumType.STRING)
+    private StatusCarro status;
+
     public Carro() {
+        this.status = StatusCarro.PENDENTE;
+    }
+
+    public StatusCarro getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusCarro status) {
+        this.status = status;
     }
 
     public Long getId() {
@@ -84,11 +96,11 @@ public class Carro implements Serializable {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Carro carro = (Carro) o;
-        return Objects.equals(getId(), carro.getId()) && Objects.equals(getModel(), carro.getModel()) && Objects.equals(getYear(), carro.getYear()) && Objects.equals(getBrand(), carro.getBrand()) && Objects.equals(getUsuario(), carro.getUsuario()) && Objects.equals(getProblem(), carro.getProblem());
+        return Objects.equals(getId(), carro.getId()) && Objects.equals(getModel(), carro.getModel()) && Objects.equals(getYear(), carro.getYear()) && Objects.equals(getBrand(), carro.getBrand()) && Objects.equals(getUsuario(), carro.getUsuario()) && Objects.equals(getProblem(), carro.getProblem()) && getStatus() == carro.getStatus();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getModel(), getYear(), getBrand(), getUsuario(), getProblem());
+        return Objects.hash(getId(), getModel(), getYear(), getBrand(), getUsuario(), getProblem(), getStatus());
     }
 }

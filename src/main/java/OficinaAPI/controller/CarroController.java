@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/carros/v1")
+@RequestMapping("/api/carros")
 public class CarroController {
     private final CarroService carroService;
 
@@ -17,9 +17,9 @@ public class CarroController {
         this.carroService = carroService;
     }
 
-    @PostMapping
-    public Carro create(@RequestBody @Valid Carro carro){
-        return carroService.create(carro);
+    @PostMapping("/usuario/{usuarioId}")
+    public Carro create(@RequestBody @Valid Carro carro, @PathVariable Long usuarioId){
+        return carroService.create(carro, usuarioId);
     }
 
     @GetMapping

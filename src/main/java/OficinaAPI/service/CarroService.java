@@ -1,6 +1,7 @@
 package OficinaAPI.service;
 
 import OficinaAPI.model.Carro;
+import OficinaAPI.model.Usuario;
 import OficinaAPI.repository.CarroRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,10 @@ public class CarroService {
         this.usuarioService = usuarioService;
     }
 
-    public Carro create(Carro carro){
+    public Carro create(Carro carro, Long usuarioId){
+        Usuario usuario = usuarioService.findById(usuarioId);
+        carro.setUsuario(usuario);
+
         return carroRepository.save(carro);
     }
 

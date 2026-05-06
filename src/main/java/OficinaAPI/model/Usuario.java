@@ -1,5 +1,6 @@
 package OficinaAPI.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -18,6 +19,7 @@ public class Usuario implements Serializable {
     @Column(nullable = false, length = 50)
     private String password;
 
+    @JsonProperty("number_phone")
     @Column(name = "number_phone", nullable = false, length = 11)
     private String numberPhone;
 
