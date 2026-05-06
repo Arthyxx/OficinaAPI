@@ -198,7 +198,7 @@
             problem: document.getElementById('problemaCarro').value,
             status: 'PENDENTE'
         };
-        fetch(`http://127.0.0.1:8080/api/carros/usuario/${usuarioId}`, {
+        fetch(`/api/carros/usuario/${usuarioId}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(novoCarro)
