@@ -3,9 +3,9 @@ spring:
     name: OficinaAPI
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://dpg-abc123.oregon-postgres.render.com:5432/oficina?ssl=true&sslmode=require
+    url: postgresql://oficina_user:MfR8hxkYuYuug7CcxWIW1d90Gseww2l5@dpg-d7tkc61j2pic73adii4g-a/oficina_haiy
     username: oficina_user
-    password: dff6acb17c6c0f6d419b02a3a1e5dcb9
+    password: MfR8hxkYuYuug7CcxWIW1d90Gseww2l5
   jpa:
     hibernate:
       ddl-auto: update
