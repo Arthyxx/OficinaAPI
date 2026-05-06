@@ -2,16 +2,16 @@ spring:
   application:
     name: OficinaAPI
   datasource:
-    driver-class-name: org.postgresql.Driver
-    url: postgresql://oficina_user:MfR8hxkYuYuug7CcxWIW1d90Gseww2l5@dpg-d7tkc61j2pic73adii4g-a/oficina_haiy
-    username: oficina_user
-    password: MfR8hxkYuYuug7CcxWIW1d90Gseww2l5
+    driver-class-name: ${DB_DRIVER}
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: ${DB_DDL:update}
     show-sql: false
     open-in-view: false
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    database-platform: ${DB_PLATFORM}
 logging:
   level:
     OficinaAPI: DEBUG
