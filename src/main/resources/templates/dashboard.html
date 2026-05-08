@@ -15,25 +15,30 @@
     <div class="col">
         <span class="fs-2">Oficina</span>
     </div>
+
     <div class="col">
         <nav class="text-end">
             <a class="btn btn-outline-dark" href="/dashboard">
                 <i class="material-icons">home</i> Dashboard
             </a>
+
             <a class="btn btn-outline-dark" href="/cadastro">
                 <i class="material-icons">directions_car</i> Produtos
             </a>
+
             <a class="btn btn-outline-danger" href="/login">
                 <i class="material-icons">logout</i> Sair
             </a>
         </nav>
     </div>
 </div>
+
 <hr>
 
 <section class="card card-body">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3>📋 Veículos na Oficina</h3>
+
         <a class="btn btn-primary" href="/cadastro">
             <i class="material-icons">add</i> Novo Carro + Cliente
         </a>
@@ -49,16 +54,90 @@
                 <th>Ano</th>
                 <th>Problema relatado</th>
                 <th>Status</th>
-                <th>Cliente (nome / telefone)</th>
+                <th>Cliente</th>
                 <th>Ações</th>
             </tr>
             </thead>
+
             <tbody id="listaCarros">
-            <tr><td colspan="8" class="text-center">Carregando...</td></tr>
+            <tr>
+                <td colspan="8" class="text-center">Carregando...</td>
+            </tr>
             </tbody>
         </table>
     </div>
 </section>
+
+<!-- MODAL EDITAR CARRO -->
+<div class="modal fade" id="modalEditarCarro" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <form id="formEditarCarro">
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Carro</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+
+                <div class="modal-body">
+                    <input type="hidden" id="editCarroId">
+
+                    <div class="mb-3">
+                        <label class="form-label">Modelo</label>
+                        <input type="text" id="editModeloCarro" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Marca</label>
+                        <input type="text" id="editMarcaCarro" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Ano</label>
+                        <input type="number" id="editAnoCarro" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Problema relatado</label>
+                        <textarea id="editProblemaCarro" class="form-control" rows="3" required></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Status</label>
+                        <select id="editStatusCarro" class="form-select" required>
+                            <option value="PENDENTE">Pendente</option>
+                            <option value="EM_ANDAMENTO">Em andamento</option>
+                            <option value="CONCLUIDO">Concluído</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Cliente</label>
+                        <select id="editUsuarioId" class="form-select" required>
+                            <option value="">Carregando clientes...</option>
+                        </select>
+                        <small class="text-muted">
+                            Selecione o cliente correto para este carro.
+                        </small>
+                    </div>
+
+                    <div id="msgEditarCarro"></div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Cancelar
+                    </button>
+
+                    <button type="submit" class="btn btn-primary">
+                        Salvar alterações
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
 
 <footer class="rodape mt-4 text-center text-muted">
     <div id="dataHora"></div>
@@ -66,78 +145,8 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    function carregarCarros() {
-        fetch('/api/carros')
-            .then(response => {
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                return response.json();
-            })
-            .then(carros => {
-                const tbody = document.getElementById('listaCarros');
-                if (!carros || carros.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="8" class="text-center">Nenhum veículo cadastrado.</td></tr>';
-                    return;
-                }
-                let html = '';
-                carros.forEach(carro => {
-                    // Ajuste do status (pode ser 'PENDENTE', 'EM_ANDAMENTO', 'CONCLUIDO')
-                    let statusClass = 'bg-secondary';
-                    if (carro.status === 'PENDENTE') statusClass = 'bg-warning';
-                    else if (carro.status === 'EM_ANDAMENTO') statusClass = 'bg-info';
-                    else if (carro.status === 'CONCLUIDO') statusClass = 'bg-success';
 
-                    const nomeCliente = carro.usuario?.name || '—';
-                    const telefone = carro.usuario?.number_phone || carro.usuario?.numberPhone || '—';
+<script src="/js/dashboard.js"></script>
 
-                    html += `
-                        <tr>
-                            <td>${carro.id}</td>
-                            <td>${carro.model}</td>
-                            <td>${carro.brand}</td>
-                            <td>${carro.year}</td>
-                            <td>${carro.problem || '—'}</td>
-                            <td><span class="badge ${statusClass}">${carro.status}</span></td>
-                            <td>${nomeCliente}<br><small class="text-muted">📞 ${telefone}</small></td>
-                            <td>
-                                <button class="btn btn-sm btn-outline-secondary" onclick="editarCarro(${carro.id})">✏️</button>
-                                <button class="btn btn-sm btn-outline-danger" onclick="excluirCarro(${carro.id})">🗑️</button>
-                            </td>
-                        </tr>
-                    `;
-                });
-                tbody.innerHTML = html;
-            })
-            .catch(err => {
-                console.error('Erro ao carregar carros:', err);
-                document.getElementById('listaCarros').innerHTML = '<tr><td colspan="8" class="text-danger text-center">Erro ao carregar dados.</td></tr>';
-            });
-    }
-
-    function excluirCarro(id) {
-        if (confirm('Tem certeza que deseja excluir este carro?')) {
-            fetch(`/api/carros/${id}`, { method: 'DELETE' })
-                .then(res => {
-                    if (res.ok) carregarCarros();
-                    else alert('Erro ao excluir: ' + res.status);
-                })
-                .catch(err => alert('Erro: ' + err));
-        }
-    }
-
-    function editarCarro(id) {
-        alert(`Edição do carro ${id} será implementada em breve.`);
-    }
-
-    function atualizarDataHora() {
-        const agora = new Date();
-        const div = document.getElementById('dataHora');
-        if (div) div.innerHTML = `<i class="material-icons fs-6">schedule</i> ${agora.toLocaleString('pt-BR')}`;
-    }
-
-    carregarCarros();
-    atualizarDataHora();
-    setInterval(atualizarDataHora, 1000);
-</script>
 </body>
 </html>

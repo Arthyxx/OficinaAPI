@@ -15,92 +15,127 @@
     <div class="col">
         <span class="fs-2">Oficina</span>
     </div>
+
     <div class="col">
         <nav class="text-end">
             <a class="btn btn-outline-dark" href="/dashboard">
                 <i class="material-icons">home</i> Dashboard
             </a>
+
             <a class="btn btn-outline-dark" href="/cadastro">
                 <i class="material-icons">directions_car</i> Produtos
             </a>
+
             <a class="btn btn-outline-danger" href="/login">
                 <i class="material-icons">logout</i> Sair
             </a>
         </nav>
     </div>
 </div>
+
 <hr>
 
 <section class="card card-body mb-4">
-    <h3>➕ Cadastrar Novo Cliente (Usuário)</h3>
+    <h3>➕ Cadastrar Novo Cliente</h3>
+
     <form id="formCliente">
         <div class="row mb-3">
             <div class="col-md-6">
                 <label class="form-label">Nome completo</label>
                 <input type="text" id="nomeCliente" class="form-control" required>
             </div>
+
             <div class="col-md-6">
-                <label class="form-label">Telefone (apenas números, 11 dígitos)</label>
-                <input type="text" id="telefoneCliente" class="form-control" required>
+                <label class="form-label">Telefone</label>
+                <input type="text" id="telefoneCliente" class="form-control" placeholder="85999999999" required>
+                <small class="text-muted">Digite apenas números, com DDD.</small>
             </div>
         </div>
+
         <div class="mb-3">
             <label class="form-label">Senha</label>
             <input type="password" id="senhaCliente" class="form-control" required>
         </div>
+
         <div class="mb-3">
-            <label class="form-label">Tipo (ex: CLIENTE, MECANICO, ADMIN)</label>
-            <input type="text" id="tipoCliente" class="form-control" value="CLIENTE" required>
+            <label class="form-label">Tipo</label>
+            <select id="tipoCliente" class="form-select" required>
+                <option value="CLIENTE" selected>Cliente</option>
+                <option value="MECANICO">Mecânico</option>
+                <option value="ADMIN">Admin</option>
+            </select>
         </div>
+
         <button type="submit" class="btn btn-success">
             <i class="material-icons">person_add</i> Cadastrar Cliente
         </button>
     </form>
+
     <div id="msgCliente" class="mt-2"></div>
 </section>
 
 <section class="card card-body">
-    <h3>🚗 Cadastrar Carro (associado a um cliente existente)</h3>
+    <h3>🚗 Cadastrar Carro</h3>
+
     <form id="formCarro">
         <div class="row mb-3">
             <div class="col-md-4">
                 <label class="form-label">Modelo</label>
                 <input type="text" id="modeloCarro" class="form-control" required>
             </div>
+
             <div class="col-md-4">
                 <label class="form-label">Marca</label>
                 <input type="text" id="marcaCarro" class="form-control" required>
             </div>
+
             <div class="col-md-4">
                 <label class="form-label">Ano</label>
                 <input type="number" id="anoCarro" class="form-control" required>
             </div>
         </div>
+
         <div class="mb-3">
             <label class="form-label">Problema relatado</label>
-            <textarea id="problemaCarro" class="form-control" rows="2"></textarea>
+            <textarea id="problemaCarro" class="form-control" rows="2" required></textarea>
         </div>
+
         <div class="mb-3">
-            <label class="form-label">ID do Cliente (Usuário) - consulte a lista abaixo</label>
-            <input type="number" id="usuarioId" class="form-control" required>
-            <small class="text-muted">Você pode cadastrar um cliente primeiro e depois usar o ID gerado.</small>
+            <label class="form-label">Cliente</label>
+            <select id="usuarioId" class="form-select" required>
+                <option value="">Carregando clientes...</option>
+            </select>
+            <small class="text-muted">
+                Selecione o cliente que será vinculado a este carro.
+            </small>
         </div>
+
         <button type="submit" class="btn btn-primary">
             <i class="material-icons">directions_car</i> Cadastrar Carro
         </button>
     </form>
+
     <div id="msgCarro" class="mt-2"></div>
 </section>
 
 <hr>
-<h4>📋 Clientes já cadastrados (para consultar ID)</h4>
+
+<h4>📋 Clientes já cadastrados</h4>
+
 <div class="table-responsive">
     <table class="table table-sm table-bordered" id="tabelaClientes">
         <thead class="table-light">
-        <tr><th>ID</th><th>Nome</th><th>Telefone</th></tr>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Telefone</th>
+        </tr>
         </thead>
+
         <tbody id="listaClientes">
-        <tr><td colspan="3">Carregando...</td></tr>
+        <tr>
+            <td colspan="3">Carregando...</td>
+        </tr>
         </tbody>
     </table>
 </div>
@@ -110,119 +145,8 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    // Função para listar todos os usuários (clientes)
-    function carregarClientes() {
-        fetch('/api/usuario')
-            .then(res => res.json())
-            .then(usuarios => {
-                const tbody = document.getElementById('listaClientes');
-                if (usuarios.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="3">Nenhum cliente cadastrado.</td></tr>';
-                    return;
-                }
-                let html = '';
-                usuarios.forEach(u => {
-                    html += `<tr><td>${u.id}</td><td>${u.name}</td><td>${u.numberPhone || '—'}</td></tr>`;
-                });
-                tbody.innerHTML = html;
-            })
-            .catch(err => {
-                console.error(err);
-                document.getElementById('listaClientes').innerHTML = '<tr><td colspan="3" class="text-danger">Erro ao carregar clientes.</td></tr>';
-            });
-    }
 
-    // Cadastrar novo cliente (usuário) - CORRIGIDO
-    document.getElementById('formCliente').addEventListener('submit', function(e) {
-        e.preventDefault();
+<script src="/js/cadastro.js"></script>
 
-        const nome = document.getElementById('nomeCliente').value;
-        const telefone = document.getElementById('telefoneCliente').value;
-        const senha = document.getElementById('senhaCliente').value;
-        const tipo = document.getElementById('tipoCliente').value;
-
-        // Validar telefone
-        if (!telefone) {
-            alert('Por favor, informe o telefone.');
-            return;
-        }
-
-        // Remover caracteres não numéricos do telefone
-        const telefoneLimpo = telefone.replace(/\D/g, '');
-
-        const novoUsuario = {
-            name: nome,
-            number_phone: telefoneLimpo,  // ✅ CORRETO - com underline
-            password: senha,
-            type: tipo
-        };
-
-        console.log('Enviando:', novoUsuario); // Para debug
-
-        fetch('/api/usuario', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(novoUsuario)
-        })
-        .then(res => {
-            if (!res.ok) {
-                return res.text().then(text => { throw new Error(text) });
-            }
-            return res.json();
-        })
-        .then(data => {
-            document.getElementById('msgCliente').innerHTML = `<div class="alert alert-success">Cliente cadastrado com ID: ${data.id}</div>`;
-            document.getElementById('formCliente').reset();
-            carregarClientes(); // atualiza a lista
-            setTimeout(() => document.getElementById('msgCliente').innerHTML = '', 3000);
-        })
-        .catch(err => {
-            console.error('Erro:', err);
-            document.getElementById('msgCliente').innerHTML = `<div class="alert alert-danger">Erro ao cadastrar: ${err.message}</div>`;
-        });
-    });
-
-    // Cadastrar carro associado a um usuário existente
-    document.getElementById('formCarro').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const usuarioId = document.getElementById('usuarioId').value;
-        if (!usuarioId) {
-            alert('Informe o ID do cliente (usuário).');
-            return;
-        }
-        const novoCarro = {
-            model: document.getElementById('modeloCarro').value,
-            brand: document.getElementById('marcaCarro').value,
-            year: parseInt(document.getElementById('anoCarro').value),
-            problem: document.getElementById('problemaCarro').value,
-            status: 'PENDENTE'
-        };
-        fetch(`/api/carros/usuario/${usuarioId}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(novoCarro)
-        })
-        .then(res => res.json())
-        .then(data => {
-            document.getElementById('msgCarro').innerHTML = `<div class="alert alert-success">Carro cadastrado com ID: ${data.id}</div>`;
-            document.getElementById('formCarro').reset();
-            setTimeout(() => document.getElementById('msgCarro').innerHTML = '', 3000);
-        })
-        .catch(err => {
-            document.getElementById('msgCarro').innerHTML = `<div class="alert alert-danger">Erro: ${err.message}</div>`;
-        });
-    });
-
-    function atualizarDataHora() {
-        const agora = new Date();
-        const div = document.getElementById('dataHora');
-        if (div) div.innerHTML = `<i class="material-icons fs-6">schedule</i> ${agora.toLocaleString('pt-BR')}`;
-    }
-
-    carregarClientes();
-    atualizarDataHora();
-    setInterval(atualizarDataHora, 1000);
-</script>
 </body>
 </html>

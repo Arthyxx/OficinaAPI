@@ -36,8 +36,8 @@ public class CarroService {
         return carro;
     }
 
-    public Carro update(Carro carro){
-        Carro entity = carroRepository.findById(carro.getId()).orElseThrow(
+    public Carro update(Long id, Carro carro){
+        Carro entity = carroRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("Car not found!")
         );
 
@@ -45,7 +45,15 @@ public class CarroService {
         entity.setModel(carro.getModel());
         entity.setProblem(carro.getProblem());
         entity.setYear(carro.getYear());
-        entity.setUsuario(carro.getUsuario());
+
+        if (carro.getUsuario() != null && carro.getUsuario().getId() != null) {
+            Usuario usuario = usuarioService.findById(carro.getUsuario().getId());
+            entity.setUsuario(usuario);
+        }
+
+        if (carro.getStatus() != null){
+            entity.setStatus(carro.getStatus());
+        }
 
         return carroRepository.save(entity);
     }

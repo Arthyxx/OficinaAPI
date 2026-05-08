@@ -32,12 +32,12 @@ public class CarroController {
         return carroService.findById(id);
     }
 
-    @PutMapping
-    public Carro update(@RequestBody @Valid Carro carro){
-        return carroService.update(carro);
+    @PutMapping("/{id}")
+    public Carro update(@PathVariable Long id,@RequestBody @Valid Carro carro){
+        return carroService.update(id, carro);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id){
         carroService.delete(id);
 
